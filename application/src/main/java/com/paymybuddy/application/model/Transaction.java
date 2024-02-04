@@ -13,7 +13,7 @@ public class Transaction {
 
     @Id
     @Column(name = "id", unique = true)
-    private Integer id;
+    private Long id;
 
     @Column(name = "sender")
     private String sender;

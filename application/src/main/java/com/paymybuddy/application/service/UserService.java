@@ -16,4 +16,16 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public void deleteUser(String emailToDelete) {
+        userRepository.deleteById(emailToDelete);
+    }
+
+    public User createUser(User newUser) {
+        return userRepository.save(newUser);
+    }
+
+    public User updateUser(User updatedUser) {
+        deleteUser(updatedUser.getEmail());
+        return createUser(updatedUser);
+    }
 }

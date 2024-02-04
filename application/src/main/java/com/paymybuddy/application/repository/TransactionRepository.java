@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.paymybuddy.application.model.Transaction;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
 }
