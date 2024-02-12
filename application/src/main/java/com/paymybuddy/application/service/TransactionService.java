@@ -16,16 +16,17 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public void deleteTransaction(Long idToDelete) {
-        transactionRepository.deleteById(idToDelete);
+    public void deleteTransaction(Transaction transactionToDelete) {
+        transactionRepository.deleteById(transactionToDelete.getId());
     }
 
     public Transaction createTransaction(Transaction newTransaction) {
+        newTransaction.setInterest(newTransaction.getAmount());
         return transactionRepository.save(newTransaction);
     }
 
     public Transaction updateTransaction(Transaction updatedTransaction) {
-        deleteTransaction(updatedTransaction.getId());
+        deleteTransaction(updatedTransaction);
         return createTransaction(updatedTransaction);
     }
 }
