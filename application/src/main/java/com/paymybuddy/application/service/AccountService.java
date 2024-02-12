@@ -16,8 +16,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public void deleteAccount(Long idToDelete) {
-        accountRepository.deleteById(idToDelete);
+    public void deleteAccount(Account accountToDelete) {
+        accountRepository.deleteById(accountToDelete.getAccountId());
     }
 
     public Account createAccount(Account newAccount) {
@@ -25,7 +25,7 @@ public class AccountService {
     }
 
     public Account updateAccount(Account updatedAccount) {
-        deleteAccount(updatedAccount.getAccountId());
+        deleteAccount(updatedAccount);
         return createAccount(updatedAccount);
     }
 }
