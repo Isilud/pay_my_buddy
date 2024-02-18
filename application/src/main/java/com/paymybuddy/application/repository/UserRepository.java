@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.paymybuddy.application.model.User;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, String> {
+import java.util.Optional;
 
+@Repository
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+    public Optional<User> findByEmail(String email);
 }
