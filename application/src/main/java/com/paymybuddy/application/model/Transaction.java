@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Entity
 @Table(name = "transaction")
 public class Transaction {
@@ -18,11 +20,17 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sender")
-    private String sender;
+    @Column(name = "sender_email")
+    private String senderEmail;
 
-    @Column(name = "recipient")
-    private String recipient;
+    @Column(name = "sender_name")
+    private String senderName;
+
+    @Column(name = "recipient_email")
+    private String recipientEmail;
+
+    @Column(name = "recipient_name")
+    private String recipientName;
 
     @Column(name = "amount")
     private Integer amount;
@@ -34,8 +42,5 @@ public class Transaction {
     private String date;
 
     @Column(name = "interest")
-    private Integer interest;
-
-    @Column(name = "friend_name")
-    private String friendName;
+    private Double interest;
 }

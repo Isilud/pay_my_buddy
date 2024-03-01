@@ -35,7 +35,7 @@ public class UserControllerTest {
     public void clear() throws Exception {
         String defaultUserAsJson = new ObjectMapper().writeValueAsString(defaultUser);
         try {
-            mockMvc.perform(
+            mockMvc.perform( // replace with repository delete call
                     MockMvcRequestBuilders.delete("/user")
                             .content(defaultUserAsJson)
                             .contentType(MediaType.APPLICATION_JSON));
@@ -49,7 +49,7 @@ public class UserControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user").content(defaultUserAsJson)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated()); // check database
     }
 
     @Test

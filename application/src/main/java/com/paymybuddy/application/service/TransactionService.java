@@ -1,32 +1,26 @@
 package com.paymybuddy.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.application.model.Transaction;
+import com.paymybuddy.application.model.User;
 import com.paymybuddy.application.repository.TransactionRepository;
 
 @Service
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
-    public Iterable<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    public TransactionService(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
     }
 
-    public void deleteTransaction(Transaction transactionToDelete) {
-        transactionRepository.deleteById(transactionToDelete.getId());
+    public Iterable<Transaction> getTransactionsByEmail(User user) {
+        return transactionRepository.findBySenderEmailOrRecipientEmail(user.getEmail());
     }
 
     public Transaction createTransaction(Transaction newTransaction) {
-        newTransaction.setInterest(newTransaction.getAmount());
+        newTransaction.setInterest(Math.floor(newTransaction.getAmount() * 0.5) / 100.0);
         return transactionRepository.save(newTransaction);
-    }
-
-    public Transaction updateTransaction(Transaction updatedTransaction) {
-        deleteTransaction(updatedTransaction);
-        return createTransaction(updatedTransaction);
     }
 }
