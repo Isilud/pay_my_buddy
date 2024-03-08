@@ -3,7 +3,6 @@ package com.paymybuddy.application.service;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.application.model.Transaction;
-import com.paymybuddy.application.model.User;
 import com.paymybuddy.application.repository.TransactionRepository;
 
 @Service
