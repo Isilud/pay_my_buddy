@@ -2,8 +2,15 @@ package com.paymybuddy.application.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Table(name = "user")
 public class User {
 
@@ -41,7 +48,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "friendlist", joinColumns = @JoinColumn(name = "email"), inverseJoinColumns = @JoinColumn(name = "friend_email"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "friendlist", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    @JsonIgnoreProperties({ "password", "friends" })
     private Set<User> friends;
 }

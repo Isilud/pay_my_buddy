@@ -26,15 +26,20 @@ public class TransactionController {
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
-    @GetMapping("/transaction")
-    @ResponseStatus(HttpStatus.OK)
-    public Set<Transaction> getTransactionsByEmail(User user) {
-        Iterator<Transaction> transactionsByEmail = transactionService.getTransactionsByEmail(user).iterator();
-        Set<Transaction> transactionList = new HashSet<Transaction>();
-        transactionsByEmail.forEachRemaining((transaction) -> transactionList.add(transaction));
-        logger.info("Registered transactions fetched ");
-        return transactionList;
-    }
+    /*
+     * @GetMapping("/transaction")
+     * 
+     * @ResponseStatus(HttpStatus.OK)
+     * public Set<Transaction> getTransactionsByEmail(User user) {
+     * Iterator<Transaction> transactionsByEmail =
+     * transactionService.getTransactionsByEmail(user).iterator();
+     * Set<Transaction> transactionList = new HashSet<Transaction>();
+     * transactionsByEmail.forEachRemaining((transaction) ->
+     * transactionList.add(transaction));
+     * logger.info("Registered transactions fetched ");
+     * return transactionList;
+     * }
+     */
 
     @PostMapping("/transaction")
     @ResponseStatus(HttpStatus.CREATED)

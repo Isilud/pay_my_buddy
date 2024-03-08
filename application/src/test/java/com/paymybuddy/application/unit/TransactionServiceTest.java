@@ -34,13 +34,17 @@ public class TransactionServiceTest {
         defaultUser = User.builder().email("originEmail").build();
     }
 
-    @Test
-    public void getTransactionWithEmail() {
-        when(transactionRepository.findBySenderEmailOrRecipientEmail("originEmail")).thenReturn(null);
-        transactionService.getTransactionsByEmail(defaultUser);
-
-        verify(transactionRepository).findBySenderEmailOrRecipientEmail("originEmail");
-    }
+    /*
+     * @Test
+     * public void getTransactionWithEmail() {
+     * when(transactionRepository.findBySenderEmailOrRecipientEmail("originEmail")).
+     * thenReturn(null);
+     * transactionService.getTransactionsByEmail(defaultUser);
+     * 
+     * verify(transactionRepository).findBySenderEmailOrRecipientEmail("originEmail"
+     * );
+     * }
+     */
 
     @Test
     public void createTransaction() {

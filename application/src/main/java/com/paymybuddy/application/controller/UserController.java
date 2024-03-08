@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class UserController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public User getUserByEmail(User userToFind) throws UserNotFoundException {
+    public User getUserByEmail(@RequestBody User userToFind) throws UserNotFoundException {
         User foundUser = userService.getUserByEmail(userToFind);
         logger.info("User found : " + foundUser.toString());
         return foundUser;
@@ -56,5 +57,13 @@ public class UserController {
         User user = userService.updateUser(updatedUser);
         logger.info("Updated user : " + user);
         return user;
+    }
+
+    @PutMapping("/user/{friendEmail}/addfriend")
+    @ResponseStatus(HttpStatus.OK)
+    public void addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
+            throws UserNotFoundException, UserAlreadyExistException {
+        userService.addUserToFriendlist(user, friendEmail);
+        logger.info("Updated user : " + user);
     }
 }

@@ -15,9 +15,10 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Iterable<Transaction> getTransactionsByEmail(User user) {
-        return transactionRepository.findBySenderEmailOrRecipientEmail(user.getEmail());
-    }
+    // public Iterable<Transaction> getTransactionsByEmail(User user) {
+    // return
+    // transactionRepository.findBySenderEmailOrRecipientEmail(user.getEmail());
+    // }
 
     public Transaction createTransaction(Transaction newTransaction) {
         newTransaction.setInterest(Math.floor(newTransaction.getAmount() * 0.5) / 100.0);
