@@ -1,8 +1,6 @@
 package com.paymybuddy.application.service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -53,27 +51,20 @@ public class UserService {
     public User addUserToFriendlist(User user, String friendEmail)
             throws UserNotFoundException, UserAlreadyExistException {
 
-        Optional<User> optionalFriendUser = userRepository.findByEmail(friendEmail);
-        if (!optionalFriendUser.isPresent()) {
-            throw new UserNotFoundException(optionalFriendUser.get());
+        Optional<User> optionalFriend = userRepository.findByEmail(friendEmail);
+        if (!optionalFriend.isPresent()) {
+            throw new UserNotFoundException(optionalFriend.get());
         }
-        Optional<User> optionalCurrentUser = userRepository.findByEmail(user.getEmail());
-        if (!optionalCurrentUser.isPresent()) {
-            throw new UserNotFoundException(optionalCurrentUser.get());
+        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+        if (!optionalUser.isPresent()) {
+            throw new UserNotFoundException(optionalUser.get());
         }
 
-        User friendUser = optionalFriendUser.get();
-        User currentUser = optionalCurrentUser.get();
+        User friend = optionalFriend.get();
+        User currentUser = optionalUser.get();
 
-        Set<User> updatedFriendUserFriendlist = new HashSet<>(friendUser.getFriends());
-        updatedFriendUserFriendlist.add(currentUser.toBuilder().build());
-        Set<User> updatedCurrentUserFriendlist = new HashSet<>(currentUser.getFriends());
-        updatedCurrentUserFriendlist.add(friendUser.toBuilder().build());
+        currentUser.getFriends().add(friend);
 
-        friendUser.setFriends(updatedFriendUserFriendlist);
-        currentUser.setFriends(updatedCurrentUserFriendlist);
-
-        updateUser(friendUser);
-        return updateUser(currentUser);
+        return userRepository.save(currentUser);
     }
 }
