@@ -35,6 +35,7 @@ public class AccountServiceTest {
     private AccountService accountService;
 
     Account defaultAccount;
+    Account updatedAccount;
     User defaultUser;
 
     @BeforeEach
@@ -122,6 +123,31 @@ public class AccountServiceTest {
         when(accountRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
 
         assertThrows(AccountNotFoundException.class, () -> accountService.deleteAccount(defaultAccount));
+    }
+
+    @Test
+    public void updateAccount() throws AccountNotFoundException {
+        defaultAccount = Account.builder().id(0).email("defaultEmail").code("defaultCode")
+                .amount(0).build();
+        updatedAccount = Account.builder().id(0).email("defaultEmail").code("newCode")
+                .amount(100).build();
+
+        when(accountRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultAccount));
+        accountService.updateAccount(updatedAccount);
+
+        verify(accountRepository).save(updatedAccount);
+    }
+
+    @Test
+    public void updateAccountNotFound() throws AccountNotFoundException {
+        defaultAccount = Account.builder().id(0).email("defaultEmail").code("defaultCode")
+                .amount(0).build();
+        updatedAccount = Account.builder().id(0).email("defaultEmail").code("newCode")
+                .amount(100).build();
+
+        when(accountRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+
+        assertThrows(AccountNotFoundException.class, () -> accountService.updateAccount(updatedAccount));
     }
 
 }

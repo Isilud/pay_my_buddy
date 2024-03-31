@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ public class UserServiceTest {
 
         User defaultUser;
         User updatedUser;
+        User friendUser;
 
         @BeforeEach
         public void clear() {
@@ -55,7 +57,6 @@ public class UserServiceTest {
                 assertThrows(UserNotFoundException.class, () -> userService.getUserByEmail(defaultUser));
         }
 
-        @SuppressWarnings("null")
         @Test
         public void testCreateNewUser() throws UserAlreadyExistException {
                 defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
@@ -77,7 +78,6 @@ public class UserServiceTest {
                 assertThrows(UserAlreadyExistException.class, () -> userService.createUser(defaultUser));
         }
 
-        @SuppressWarnings("null")
         @Test
         public void testDeleteUser() throws UserNotFoundException {
                 defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
@@ -99,7 +99,6 @@ public class UserServiceTest {
                 assertThrows(UserNotFoundException.class, () -> userService.deleteUserByEmail(defaultUser));
         }
 
-        @SuppressWarnings("null")
         @Test
         public void testUpdateUser() throws UserNotFoundException, UserAlreadyExistException {
                 defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
@@ -127,4 +126,48 @@ public class UserServiceTest {
                 assertThrows(UserNotFoundException.class, () -> userService.updateUser(defaultUser));
         }
 
+        @Test
+        public void testAddToFriendlist() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").friends(new HashSet<>())
+                                .build();
+                friendUser = User.builder().email("friendEmail").firstName("friendFirstName")
+                                .lastName("friendLastName").password("friendPassword").friends(new HashSet<>()).build();
+
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
+                when(userRepository.findByEmail("friendEmail")).thenReturn(Optional.of(friendUser));
+                userService.addUserToFriendlist(defaultUser, "friendEmail");
+
+                verify(userRepository).save(defaultUser);
+                verify(userRepository).save(friendUser);
+        }
+
+        @Test
+        public void testAddToFriendlistNoUser() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").friends(new HashSet<>())
+                                .build();
+                friendUser = User.builder().email("friendEmail").firstName("friendFirstName")
+                                .lastName("friendLastName").password("friendPassword").friends(new HashSet<>()).build();
+
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+                when(userRepository.findByEmail("friendEmail")).thenReturn(Optional.of(friendUser));
+
+                assertThrows(UserNotFoundException.class, () -> userService.addUserToFriendlist(defaultUser,
+                                "friendEmail"));
+        }
+
+        @Test
+        public void testAddToFriendlistNoFriend() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").friends(new HashSet<>())
+                                .build();
+                friendUser = User.builder().email("friendEmail").firstName("friendFirstName")
+                                .lastName("friendLastName").password("friendPassword").friends(new HashSet<>()).build();
+
+                when(userRepository.findByEmail("friendEmail")).thenReturn(Optional.empty());
+
+                assertThrows(UserNotFoundException.class,
+                                () -> userService.addUserToFriendlist(defaultUser, "friendEmail"));
+        }
 }

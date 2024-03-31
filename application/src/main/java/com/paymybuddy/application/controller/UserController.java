@@ -63,7 +63,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
             throws UserNotFoundException, UserAlreadyExistException {
-        userService.addUserToFriendlist(user, friendEmail);
-        logger.info("Updated user : " + user);
+        User updatedUser = userService.addUserToFriendlist(user, friendEmail);
+        logger.info("Updated user : " + updatedUser);
     }
 }

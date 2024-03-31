@@ -26,7 +26,7 @@ public class AccountService {
         this.userService = userService;
     }
 
-    public Account getAccount(Account account) throws UserNotFoundException, AccountNotFoundException {
+    public Account getAccount(Account account) throws AccountNotFoundException {
         Optional<Account> foundAccount = accountRepository.findByEmail(account.getEmail());
         if (!foundAccount.isPresent())
             throw new AccountNotFoundException(account);
@@ -45,9 +45,17 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
-    @SuppressWarnings("null")
     public void deleteAccount(Account account) throws UserNotFoundException, AccountNotFoundException {
         Account accountToDelete = getAccount(account);
         accountRepository.delete(accountToDelete);
+    }
+
+    public Account updateAccount(Account updatedAccount) throws AccountNotFoundException {
+        Optional<Account> optionalAccount = accountRepository.findByEmail(updatedAccount.getEmail());
+        if (!optionalAccount.isPresent()) {
+            throw new AccountNotFoundException(updatedAccount);
+        }
+        updatedAccount.setId(optionalAccount.get().getId());
+        return accountRepository.save(updatedAccount);
     }
 }

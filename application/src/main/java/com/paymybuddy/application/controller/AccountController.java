@@ -17,6 +17,7 @@ import com.paymybuddy.application.service.AccountService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -30,7 +31,7 @@ public class AccountController {
     @GetMapping("/account")
     @ResponseStatus(HttpStatus.OK)
     public Account getAccount(@RequestBody Account newAccount)
-            throws AccountNotFoundException, UserNotFoundException {
+            throws AccountNotFoundException {
         Account account = accountService.getAccount(newAccount);
         logger.info("Account found : " + account.toString());
         return account;
@@ -55,14 +56,12 @@ public class AccountController {
         return;
     }
 
-    /*
-     * @PutMapping("/account")
-     * 
-     * @ResponseStatus(HttpStatus.OK)
-     * public Account updateAccount(@RequestBody Account updatedAccount) {
-     * Account account = accountService.updateAccount(updatedAccount);
-     * logger.info("Updated account : " + account);
-     * return account;
-     * }
-     */
+    @PutMapping("/account")
+    @ResponseStatus(HttpStatus.OK)
+    public Account updateAccount(@RequestBody Account updatedAccount) throws AccountNotFoundException {
+        Account account = accountService.updateAccount(updatedAccount);
+        logger.info("Updated account : " + account);
+        return account;
+    }
+
 }
