@@ -61,10 +61,9 @@ public class UserController {
 
     @PutMapping("/user/{friendEmail}/addfriend")
     @ResponseStatus(HttpStatus.OK)
-    public User addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
+    public void addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
             throws UserNotFoundException, UserAlreadyExistException {
-        User updatedUser = userService.addUserToFriendlist(user, friendEmail);
-        logger.info("Updated user : " + updatedUser);
-        return updatedUser;
+        userService.addUserToFriendlist(user, friendEmail);
+        logger.info("Updated user : " + user);
     }
 }

@@ -31,6 +31,7 @@ public class UserControllerTest {
                 .lastName("defaultLastName").password("defaultPassword").build();
     }
 
+    @SuppressWarnings("null")
     @AfterEach
     public void clear() throws Exception {
         String defaultUserAsJson = new ObjectMapper().writeValueAsString(defaultUser);
@@ -43,6 +44,7 @@ public class UserControllerTest {
         }
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testAddUser() throws Exception {
         String defaultUserAsJson = new ObjectMapper().writeValueAsString(defaultUser);
@@ -52,6 +54,7 @@ public class UserControllerTest {
                 .andExpect(status().isCreated()); // check database
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testDeleteUser() throws Exception {
         String defaultUserAsJson = new ObjectMapper().writeValueAsString(defaultUser);
@@ -63,6 +66,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testUpdateUser() throws Exception {
         String defaultUserAsJson = new ObjectMapper().writeValueAsString(defaultUser);

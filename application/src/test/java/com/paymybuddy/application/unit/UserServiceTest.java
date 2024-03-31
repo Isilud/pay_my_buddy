@@ -21,108 +21,110 @@ import com.paymybuddy.application.service.UserService;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+        @Mock
+        private UserRepository userRepository;
 
-    private UserService userService;
+        private UserService userService;
 
-    User defaultUser;
-    User updatedUser;
+        User defaultUser;
+        User updatedUser;
 
-    @BeforeEach
-    public void clear() {
-        userService = new UserService(userRepository);
-    }
+        @BeforeEach
+        public void clear() {
+                userService = new UserService(userRepository);
+        }
 
-    @Test
-    public void getUser() throws UserNotFoundException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @Test
+        public void getUser() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
-        userService.getUserByEmail(defaultUser);
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
+                userService.getUserByEmail(defaultUser);
 
-        verify(userRepository).findByEmail("defaultEmail");
-    }
+                verify(userRepository).findByEmail("defaultEmail");
+        }
 
-    @Test
-    public void getUserNotFound() throws UserNotFoundException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @Test
+        public void getUserNotFound() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.getUserByEmail(defaultUser));
-    }
+                assertThrows(UserNotFoundException.class, () -> userService.getUserByEmail(defaultUser));
+        }
 
-    @Test
-    public void testCreateNewUser() throws UserAlreadyExistException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @SuppressWarnings("null")
+        @Test
+        public void testCreateNewUser() throws UserAlreadyExistException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
-        userService.createUser(defaultUser);
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+                userService.createUser(defaultUser);
 
-        verify(userRepository).save(defaultUser);
-    }
+                verify(userRepository).save(defaultUser);
+        }
 
-    @Test
-    public void testNewUserAlreadyExist() throws UserAlreadyExistException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @Test
+        public void testNewUserAlreadyExist() throws UserAlreadyExistException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
 
-        assertThrows(UserAlreadyExistException.class, () -> userService.createUser(defaultUser));
-    }
+                assertThrows(UserAlreadyExistException.class, () -> userService.createUser(defaultUser));
+        }
 
-    @Test
-    public void testDeleteUser() throws UserNotFoundException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @SuppressWarnings("null")
+        @Test
+        public void testDeleteUser() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
-        userService.deleteUserByEmail(defaultUser);
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.of(defaultUser));
+                userService.deleteUserByEmail(defaultUser);
 
-        verify(userRepository).delete(defaultUser);
-    }
+                verify(userRepository).delete(defaultUser);
+        }
 
-    @Test
-    public void testDeleteUserNotFound() throws UserNotFoundException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @Test
+        public void testDeleteUserNotFound() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.deleteUserByEmail(defaultUser));
-    }
+                assertThrows(UserNotFoundException.class, () -> userService.deleteUserByEmail(defaultUser));
+        }
 
-    @Test
-    public void testUpdateUser() throws UserNotFoundException, UserAlreadyExistException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
-        updatedUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @SuppressWarnings("null")
+        @Test
+        public void testUpdateUser() throws UserNotFoundException, UserAlreadyExistException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
+                updatedUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("newPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail"))
-                .thenReturn(Optional.of(defaultUser))
-                .thenReturn(Optional.empty());
-        userService.updateUser(updatedUser);
+                when(userRepository.findByEmail("defaultEmail"))
+                                .thenReturn(Optional.of(defaultUser))
+                                .thenReturn(Optional.empty());
+                userService.updateUser(updatedUser);
 
-        verify(userRepository).delete(defaultUser);
-        verify(userRepository).save(updatedUser);
-    }
+                verify(userRepository).save(updatedUser);
+        }
 
-    @Test
-    public void testUpdateUserNotFound() throws UserNotFoundException {
-        defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
-        updatedUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
-                .lastName("defaultLastName").password("defaultPassword").build();
+        @Test
+        public void testUpdateUserNotFound() throws UserNotFoundException {
+                defaultUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("defaultPassword").build();
+                updatedUser = User.builder().email("defaultEmail").firstName("defaultFirstName")
+                                .lastName("defaultLastName").password("newPassword").build();
 
-        when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
+                when(userRepository.findByEmail("defaultEmail")).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.updateUser(defaultUser));
-    }
+                assertThrows(UserNotFoundException.class, () -> userService.updateUser(defaultUser));
+        }
 
 }

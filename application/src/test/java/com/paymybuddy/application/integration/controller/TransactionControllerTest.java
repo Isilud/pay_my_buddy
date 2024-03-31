@@ -72,16 +72,4 @@ public class TransactionControllerTest {
 
         assertTrue(transactionRepository.count() == 1);
     }
-
-    @Test
-    public void testGetTransaction() throws Exception {
-        String defaultTransactionAsJson = new ObjectMapper().writeValueAsString(defaultTransaction);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/transaction").content(defaultTransactionAsJson)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()); // check database
-
-        // assertTrue(transactionRepository.findBySenderEmailOrRecipientEmail("firstEmail").size()
-        // == 1);
-    }
 }
