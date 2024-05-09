@@ -6,74 +6,86 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.paymybuddy.application.controller.AccountController;
+import com.paymybuddy.application.exception.AccountCodeAlreadyInUse;
 import com.paymybuddy.application.exception.UserAlreadyExistException;
 import com.paymybuddy.application.exception.UserNotFoundException;
+import com.paymybuddy.application.model.Account;
 import com.paymybuddy.application.model.User;
+import com.paymybuddy.application.repository.AccountRepository;
 import com.paymybuddy.application.repository.UserRepository;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
-    Logger logger = LoggerFactory.getLogger(AccountController.class);
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
-    public User getUserByEmail(User userToFind) throws UserNotFoundException {
-        Optional<User> foundUser = userRepository.findByEmail(userToFind.getEmail());
+    public User getUserById(User userToFind) throws UserNotFoundException {
+        Optional<User> foundUser = userRepository.findById(userToFind.getId());
         if (!foundUser.isPresent()) {
-            throw new UserNotFoundException(userToFind);
+            throw new UserNotFoundException();
         }
         return foundUser.get();
     }
 
-    @SuppressWarnings("null")
-    public void deleteUserByEmail(User userToDelete) throws UserNotFoundException {
-        User foundUser = getUserByEmail(userToDelete);
+    public void deleteUserById(User userToDelete) throws UserNotFoundException {
+        User foundUser = getUserById(userToDelete);
         userRepository.delete(foundUser);
     }
 
-    public User createUser(User newUser) throws UserAlreadyExistException {
+    public User createUser(User newUser) throws UserAlreadyExistException, AccountCodeAlreadyInUse {
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
         if (existingUser.isPresent()) {
             throw new UserAlreadyExistException(existingUser.get());
         }
-        return userRepository.save(newUser);
+        Optional<Account> optionalAccount = accountRepository.findByCode(newUser.getAccount().getCode());
+        if (optionalAccount.isPresent()) {
+            throw new AccountCodeAlreadyInUse(optionalAccount.get());
+        }
+        User user = newUser.toBuilder().account(new Account(newUser.getAccount().getCode())).build();
+        return userRepository.save(user);
     }
 
-    public User updateUser(User updatedUser) throws UserNotFoundException {
-        Optional<User> optionalUser = userRepository.findByEmail(updatedUser.getEmail());
+    public User updateUser(User updatedUser) throws UserNotFoundException, AccountCodeAlreadyInUse {
+        Optional<User> optionalUser = userRepository.findById(updatedUser.getId());
         if (!optionalUser.isPresent()) {
-            throw new UserNotFoundException(updatedUser);
+            throw new UserNotFoundException();
         }
-        updatedUser.setId(optionalUser.get().getId());
+        updatedUser.getAccount().setId(optionalUser.get().getAccount().getId());
+        Optional<Account> optionalAccount = accountRepository.findByCode(updatedUser.getAccount().getCode());
+        if (optionalAccount.isPresent() && (optionalAccount.get().getId() != updatedUser.getAccount().getId())) {
+            throw new AccountCodeAlreadyInUse(optionalAccount.get());
+        }
         logger.info("To save : {}", updatedUser);
         return userRepository.save(updatedUser);
     }
 
-    public User addUserToFriendlist(User user, String friendEmail)
-            throws UserNotFoundException {
+    public User addUserToFriendlist(User user, Integer friendId)
+            throws UserNotFoundException, AccountCodeAlreadyInUse {
 
-        Optional<User> optionalFriendUser = userRepository.findByEmail(friendEmail);
+        Optional<User> optionalFriendUser = userRepository.findById(friendId);
         if (optionalFriendUser.isEmpty()) {
-            throw new UserNotFoundException(User.builder().email(friendEmail).build());
+            throw new UserNotFoundException();
         }
-        Optional<User> optionalCurrentUser = userRepository.findByEmail(user.getEmail());
+        Optional<User> optionalCurrentUser = userRepository.findById(user.getId());
         if (optionalCurrentUser.isEmpty()) {
-            throw new UserNotFoundException(user);
+            throw new UserNotFoundException();
         }
-        logger.info("Optionnal friend get : {}", optionalFriendUser.get());
-        logger.info("Optionnal get : {}", optionalCurrentUser.get());
 
-        User friendUser = optionalFriendUser.get();
-        User currentUser = optionalCurrentUser.get();
-        logger.info("Before update : {}", currentUser);
+        User friendUser = getUserById(User.builder().id(friendId).build());
+        User currentUser = getUserById(user);
 
         Set<User> updatedCurrentUserFriendlist = new HashSet<>(currentUser.getFriends());
         updatedCurrentUserFriendlist.add(friendUser.toBuilder().build());

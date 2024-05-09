@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.paymybuddy.application.model.Transaction;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
-    // @Query("SELECT t FROM Transaction t WHERE t.sender_email = :email OR
-    // t.recipient_email = :email")
-    // @Query("SELECT u FROM User u WHERE u.status = ?1 and u.name = ?2")
-    // List<Transaction> findBySenderEmailOrRecipientEmail(String email);
+    Iterable<Transaction> findByUserIdOrFriendId(int userId, int friendId);
 
+    public default Iterable<Transaction> findTransactionWithId(Integer id) {
+        return findByUserIdOrFriendId(id, id);
+    };
 }

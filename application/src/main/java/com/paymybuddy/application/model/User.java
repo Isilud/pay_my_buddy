@@ -3,6 +3,8 @@ package com.paymybuddy.application.model;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,10 +45,11 @@ public class User {
 
     @OneToMany
     @JoinTable(name = "friendlist", joinColumns = @JoinColumn(name = "friendlist_user_id"), inverseJoinColumns = @JoinColumn(name = "friendlist_friend_id"))
-    @JsonIgnoreProperties({ "password", "friends" })
+    @JsonIgnoreProperties({ "password", "friends", "account" })
     private Set<User> friends;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "account_id")
     private Account account;
 
     public int getId() {
@@ -103,6 +106,10 @@ public class User {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getName() {
+        return this.firstName + " " + this.lastName;
     }
 
 }

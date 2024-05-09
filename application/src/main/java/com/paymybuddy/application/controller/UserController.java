@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paymybuddy.application.exception.AccountCodeAlreadyInUse;
 import com.paymybuddy.application.exception.UserAlreadyExistException;
 import com.paymybuddy.application.exception.UserNotFoundException;
 import com.paymybuddy.application.model.User;
@@ -28,15 +29,15 @@ public class UserController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public User getUserByEmail(@RequestBody User userToFind) throws UserNotFoundException {
-        User foundUser = userService.getUserByEmail(userToFind);
+    public User getUserById(@RequestBody User userToFind) throws UserNotFoundException {
+        User foundUser = userService.getUserById(userToFind);
         logger.info("User found : " + foundUser.toString());
         return foundUser;
     }
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User newUser) throws UserAlreadyExistException {
+    public User createUser(@RequestBody User newUser) throws UserAlreadyExistException, AccountCodeAlreadyInUse {
         logger.info("Creating user : " + newUser.toString());
         User user = userService.createUser(newUser);
         logger.info("New user : " + user.toString());
@@ -46,24 +47,25 @@ public class UserController {
     @DeleteMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@RequestBody User userToDelete) throws UserNotFoundException {
-        userService.deleteUserByEmail(userToDelete);
-        logger.info("Deleted user with email : " + userToDelete.getEmail());
+        userService.deleteUserById(userToDelete);
+        logger.info("Deleted user with id : " + userToDelete.getId());
         return;
     }
 
     @PutMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@RequestBody User updatedUser) throws UserNotFoundException, UserAlreadyExistException {
+    public User updateUser(@RequestBody User updatedUser)
+            throws UserNotFoundException, UserAlreadyExistException, AccountCodeAlreadyInUse {
         User user = userService.updateUser(updatedUser);
         logger.info("Updated user : " + user);
         return user;
     }
 
-    @PutMapping("/user/{friendEmail}/addfriend")
+    @PutMapping("/user/{friendId}/addfriend")
     @ResponseStatus(HttpStatus.OK)
-    public void addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
-            throws UserNotFoundException, UserAlreadyExistException {
-        User updatedUser = userService.addUserToFriendlist(user, friendEmail);
+    public void addFriendToUser(@PathVariable("friendId") Integer friendId, @RequestBody User user)
+            throws UserNotFoundException, UserAlreadyExistException, AccountCodeAlreadyInUse {
+        User updatedUser = userService.addUserToFriendlist(user, friendId);
         logger.info("Updated user : " + updatedUser);
     }
 }
