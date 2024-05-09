@@ -80,7 +80,8 @@ public class TransactionService {
         double total = transaction.getAmount() + transaction.getInterest();
 
         if (transaction.getOperation().equals(Operation.WITHDRAW)) {
-            user.getAccount().setAmount(user.getAccount().getAmount() + total - 2 * transaction.getInterest());
+            user.getAccount().setAmount(user.getAccount().getAmount() + transaction.getAmount()
+                    - transaction.getInterest());
         } else if (total > user.getAccount().getAmount()) {
             throw new TransactionWithUnsufficientAmount(transaction);
         } else {
@@ -91,7 +92,7 @@ public class TransactionService {
                 if (foundFriend.isEmpty())
                     throw new UserNotFoundException();
                 User friend = foundFriend.get();
-                friend.getAccount().setAmount(friend.getAccount().getAmount() + total);
+                friend.getAccount().setAmount(friend.getAccount().getAmount() + transaction.getAmount());
                 userRepository.save(friend);
             }
         }
