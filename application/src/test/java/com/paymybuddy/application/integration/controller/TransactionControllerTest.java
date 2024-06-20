@@ -28,7 +28,7 @@ import com.paymybuddy.application.repository.UserRepository;
 import com.paymybuddy.application.service.DateService;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestInstance(Lifecycle.PER_CLASS)
 public class TransactionControllerTest {
 
@@ -130,9 +130,8 @@ public class TransactionControllerTest {
 
         @Test
         public void getAllTransactionWithUser() throws Exception {
-                String defaultUserAsJson = new ObjectMapper().writeValueAsString(friend);
 
-                mockMvc.perform(MockMvcRequestBuilders.get("/transaction").content(defaultUserAsJson)
+                mockMvc.perform(MockMvcRequestBuilders.get(String.format("/transaction/%s", friend.getId()))
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk());
         }

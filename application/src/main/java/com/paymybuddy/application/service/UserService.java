@@ -32,8 +32,8 @@ public class UserService {
         this.accountRepository = accountRepository;
     }
 
-    public User getUserById(User userToFind) throws UserNotFoundException {
-        Optional<User> foundUser = userRepository.findById(userToFind.getId());
+    public User getUserById(Integer id) throws UserNotFoundException {
+        Optional<User> foundUser = userRepository.findById(id);
         if (!foundUser.isPresent()) {
             throw new UserNotFoundException();
         }
@@ -41,7 +41,7 @@ public class UserService {
     }
 
     public void deleteUserById(User userToDelete) throws UserNotFoundException {
-        User foundUser = getUserById(userToDelete);
+        User foundUser = getUserById(userToDelete.getId());
         userRepository.delete(foundUser);
     }
 
@@ -72,10 +72,10 @@ public class UserService {
         return userRepository.save(updatedUser);
     }
 
-    public User addUserToFriendlist(User user, Integer friendId)
+    public User addUserToFriendlist(User user, String friendEmail)
             throws UserNotFoundException, AccountCodeAlreadyInUse {
 
-        Optional<User> optionalFriendUser = userRepository.findById(friendId);
+        Optional<User> optionalFriendUser = userRepository.findByEmail(friendEmail);
         if (optionalFriendUser.isEmpty()) {
             throw new UserNotFoundException();
         }
@@ -84,8 +84,8 @@ public class UserService {
             throw new UserNotFoundException();
         }
 
-        User friendUser = getUserById(User.builder().id(friendId).build());
-        User currentUser = getUserById(user);
+        User friendUser = optionalFriendUser.get();
+        User currentUser = optionalCurrentUser.get();
 
         Set<User> updatedCurrentUserFriendlist = new HashSet<>(currentUser.getFriends());
         updatedCurrentUserFriendlist.add(friendUser.toBuilder().build());

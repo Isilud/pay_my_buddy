@@ -55,7 +55,7 @@ public class UserServiceTest {
                 defaultUser = User.builder().id(1).build();
 
                 when(userRepository.findById(defaultUser.getId())).thenReturn(Optional.of(defaultUser));
-                userService.getUserById(defaultUser);
+                userService.getUserById(defaultUser.getId());
 
                 verify(userRepository).findById(defaultUser.getId());
         }
@@ -66,7 +66,7 @@ public class UserServiceTest {
 
                 when(userRepository.findById(defaultUser.getId())).thenReturn(Optional.empty());
 
-                assertThrows(UserNotFoundException.class, () -> userService.getUserById(defaultUser));
+                assertThrows(UserNotFoundException.class, () -> userService.getUserById(defaultUser.getId()));
         }
 
         @Test
@@ -189,8 +189,8 @@ public class UserServiceTest {
                                 .friends(new HashSet<>()).build();
 
                 when(userRepository.findById(defaultUser.getId())).thenReturn(Optional.of(defaultUser));
-                when(userRepository.findById(2)).thenReturn(Optional.of(friendUser));
-                userService.addUserToFriendlist(defaultUser, 2);
+                when(userRepository.findByEmail("friendEmail")).thenReturn(Optional.of(friendUser));
+                userService.addUserToFriendlist(defaultUser, "friendEmail");
 
                 verify(userRepository).save(defaultUser);
         }
@@ -203,11 +203,8 @@ public class UserServiceTest {
                 friendUser = User.builder().id(2).email("friendEmail").firstName("friendFirstName")
                                 .lastName("friendLastName").password("friendPassword").friends(new HashSet<>()).build();
 
-                when(userRepository.findById(defaultUser.getId())).thenReturn(Optional.empty());
-                when(userRepository.findById(2)).thenReturn(Optional.of(friendUser));
-
                 assertThrows(UserNotFoundException.class, () -> userService.addUserToFriendlist(defaultUser,
-                                2));
+                                "friendEmail"));
         }
 
         @Test
@@ -221,9 +218,7 @@ public class UserServiceTest {
                                 .lastName("friendLastName").account(defaultAccount).password("friendPassword")
                                 .friends(new HashSet<>()).build();
 
-                when(userRepository.findById(2)).thenReturn(Optional.empty());
-
                 assertThrows(UserNotFoundException.class,
-                                () -> userService.addUserToFriendlist(defaultUser, 2));
+                                () -> userService.addUserToFriendlist(defaultUser, "friendEmail"));
         }
 }

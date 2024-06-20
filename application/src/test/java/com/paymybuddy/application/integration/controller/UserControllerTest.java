@@ -26,7 +26,7 @@ import com.paymybuddy.application.repository.AccountRepository;
 import com.paymybuddy.application.repository.UserRepository;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @Transactional
 public class UserControllerTest {
 
@@ -73,10 +73,8 @@ public class UserControllerTest {
         @Test
         public void testDeleteUser() throws Exception {
                 User savedUser = userRepository.save(defaultUser);
-                String savedUserAsJson = new ObjectMapper().writeValueAsString(savedUser);
 
-                mockMvc.perform(MockMvcRequestBuilders.delete("/user").content(
-                                savedUserAsJson)
+                mockMvc.perform(MockMvcRequestBuilders.delete(String.format("/user/%s/delete", savedUser.getId()))
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk());
 
@@ -107,7 +105,8 @@ public class UserControllerTest {
                 User friendUser = defaultUser.toBuilder().email("friendEmail").build();
                 User savedFriendUser = userRepository.save(friendUser);
 
-                mockMvc.perform(MockMvcRequestBuilders.put(String.format("/user/%s/addfriend", savedFriendUser.getId()))
+                mockMvc.perform(MockMvcRequestBuilders
+                                .put(String.format("/user/%s/addfriend", savedFriendUser.getEmail()))
                                 .content(savedUserAsJson)
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk());

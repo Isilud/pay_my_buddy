@@ -27,10 +27,10 @@ public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping("/user")
+    @GetMapping("/user/{id}/info")
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@RequestBody User userToFind) throws UserNotFoundException {
-        User foundUser = userService.getUserById(userToFind);
+    public User getUserById(@PathVariable("id") Integer id) throws UserNotFoundException {
+        User foundUser = userService.getUserById(id);
         logger.info("User found : " + foundUser.toString());
         return foundUser;
     }
@@ -44,11 +44,11 @@ public class UserController {
         return user;
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@RequestBody User userToDelete) throws UserNotFoundException {
-        userService.deleteUserById(userToDelete);
-        logger.info("Deleted user with id : " + userToDelete.getId());
+    public void deleteUser(@PathVariable("id") Integer id) throws UserNotFoundException {
+        userService.deleteUserById(User.builder().id(id).build());
+        logger.info("Deleted user with id : " + id);
         return;
     }
 
@@ -61,11 +61,11 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/user/{friendId}/addfriend")
+    @PutMapping("/user/{friendEmail}/addfriend")
     @ResponseStatus(HttpStatus.OK)
-    public void addFriendToUser(@PathVariable("friendId") Integer friendId, @RequestBody User user)
+    public void addFriendToUser(@PathVariable("friendEmail") String friendEmail, @RequestBody User user)
             throws UserNotFoundException, UserAlreadyExistException, AccountCodeAlreadyInUse {
-        User updatedUser = userService.addUserToFriendlist(user, friendId);
+        User updatedUser = userService.addUserToFriendlist(user, friendEmail);
         logger.info("Updated user : " + updatedUser);
     }
 }

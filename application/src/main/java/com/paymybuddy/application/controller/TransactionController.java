@@ -19,6 +19,7 @@ import com.paymybuddy.application.model.User;
 import com.paymybuddy.application.service.TransactionService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,13 +31,14 @@ public class TransactionController {
 
     Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
-    @GetMapping("/transaction")
+    @GetMapping("/transaction/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Transaction> getTransactionsById(@RequestBody User user) throws UserNotFoundException {
-        Iterator<Transaction> transactionsById = transactionService.getTransactionsByUserId(user).iterator();
+    public Set<Transaction> getTransactionsById(@PathVariable("id") Integer id) throws UserNotFoundException {
+        Iterator<Transaction> transactionsById = transactionService
+                .getTransactionsByUserId(User.builder().id(id).build()).iterator();
         Set<Transaction> transactionList = new HashSet<Transaction>();
         transactionsById.forEachRemaining((transaction) -> transactionList.add(transaction));
-        logger.info("Registered transactions fetched for user with mail ", user.getEmail());
+        logger.info("Registered transactions fetched for user with ID ", id);
         return transactionList;
     }
 
