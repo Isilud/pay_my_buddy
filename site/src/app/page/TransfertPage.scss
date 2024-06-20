@@ -1,0 +1,32 @@
+.transfertpage {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+  }
+
+  &__paysection {
+    display: flex;
+    background-color: lightgray;
+    column-gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    margin-bottom: 1rem;
+
+    &__moneyinput {
+      width: 8rem;
+    }
+  }
+
+  &__table {
+    & span {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

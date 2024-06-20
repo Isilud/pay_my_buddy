@@ -1,0 +1,14 @@
+.profilepage {
+  display: flex;
+  flex-direction: column;
+  background-color: lightgray;
+  row-gap: 2rem;
+  padding: 3rem;
+
+  &__line {
+    display: flex;
+    flex-direction: row;
+    column-gap: 2rem;
+    align-items: center;
+  }
+}

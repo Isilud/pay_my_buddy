@@ -1,0 +1,35 @@
+.contactpage {
+  display: flex;
+  flex-direction: column;
+
+  &__addfriend {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+  }
+
+  &__friendlist {
+    display: flex;
+    background-color: lightgray;
+    column-gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin-bottom: 1rem;
+
+    &__table {
+      width: fit-content;
+      min-width: 50%;
+      column-gap: 2rem;
+      border-spacing: 10px;
+      background-color: white;
+      border: 1px black solid;
+
+      & span {
+        width: 100%;
+        display: flex;
+        justify-content: left;
+      }
+    }
+  }
+}
