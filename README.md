@@ -20,8 +20,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 1. Clonez le repository du projet sur votre machine locale :
 
    ```bash
-   git clone https://github.com/votre-utilisateur/votre-repository.git
-   cd votre-repository
+   git clone https://github.com/Isilud/pay_my_buddy.git
+   cd pay_my_buddy
    ```
 
 2. Créez un fichier .env dans le dossier /application et ajoutez-y les informations suivantes :
@@ -68,8 +68,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 
 ### Diagramme UML
 
-![Description de l'image](pay_my_buddy\docs\UML.drawio.png)
+![Description de l'image](docs/UML.drawio.png)
 
 ### Schéma de la Base de Données
 
-![Description de l'image](pay_my_buddy\docs\Data_Model.drawio.png)
+![Description de l'image](docs/Data_Model.drawio.png)
