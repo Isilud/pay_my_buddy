@@ -46,7 +46,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 
    ```bash
    cd ../..
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
    ```
 
 ### Étape 3 : Lancement du frontend
