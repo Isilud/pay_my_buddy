@@ -68,8 +68,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 
 ### Diagramme UML
 
-![Description de l'image](pay_my_buddy\docs\UML.drawio.png)
+![Description de l'image](pay_my_buddy/docs/UML.drawio.png)
 
 ### Schéma de la Base de Données
 
-![Description de l'image](pay_my_buddy\docs\Data_Model.drawio.png)
+![Description de l'image](pay_my_buddy/docs/Data_Model.drawio.png)
