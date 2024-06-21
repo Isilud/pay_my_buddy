@@ -1,0 +1,58 @@
+CREATE TABLE IF NOT EXISTS `data`.`user` (
+  `account_id` INT(11) NOT NULL,
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_email` VARCHAR(255) NULL DEFAULT NULL,
+  `user_firstname` VARCHAR(255) NULL DEFAULT NULL,
+  `user_lastname` VARCHAR(255) NULL DEFAULT NULL,
+  `user_password` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `UK_nrrhhb0bsexvi8ch6wnon9uog` (`account_id` ASC) VISIBLE,
+  UNIQUE INDEX `UK_j09k2v8lxofv2vecxu2hde9so` (`user_email` ASC) VISIBLE,
+  CONSTRAINT `FKc3b4xfbq6rbkkrddsdum8t5f0`
+    FOREIGN KEY (`account_id`)
+    REFERENCES `data`.`account` (`account_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = latin1
+
+CREATE TABLE IF NOT EXISTS `data`.`account` (
+  `account_amount` DOUBLE NULL DEFAULT NULL,
+  `account_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `account_code` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`account_id`),
+  UNIQUE INDEX `UK_ah2gw5ynairyihj4glqfv5sy3` (`account_code` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = latin1
+
+CREATE TABLE IF NOT EXISTS `data`.`friendlist` (
+  `friendlist_friend_id` INT(11) NOT NULL,
+  `friendlist_user_id` INT(11) NOT NULL,
+  PRIMARY KEY (`friendlist_friend_id`, `friendlist_user_id`),
+  UNIQUE INDEX `UK_sph8nldan8qhic9vjvb75uscx` (`friendlist_friend_id` ASC) VISIBLE,
+  INDEX `FKp1dcl4hn4c5jacbpnn99prkf1` (`friendlist_user_id` ASC) VISIBLE,
+  CONSTRAINT `FK2u1fjqx82wmaxtt0g39wjrm0o`
+    FOREIGN KEY (`friendlist_friend_id`)
+    REFERENCES `data`.`user` (`user_id`),
+  CONSTRAINT `FKp1dcl4hn4c5jacbpnn99prkf1`
+    FOREIGN KEY (`friendlist_user_id`)
+    REFERENCES `data`.`user` (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+
+CREATE TABLE IF NOT EXISTS `data`.`transaction` (
+  `amount` DOUBLE NULL DEFAULT NULL,
+  `friend_id` INT(11) NULL DEFAULT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `interest` DOUBLE NULL DEFAULT NULL,
+  `user_id` INT(11) NULL DEFAULT NULL,
+  `with_bank` BIT(1) NULL DEFAULT NULL,
+  `date` VARCHAR(255) NULL DEFAULT NULL,
+  `description` VARCHAR(255) NULL DEFAULT NULL,
+  `friend_name` VARCHAR(255) NULL DEFAULT NULL,
+  `user_name` VARCHAR(255) NULL DEFAULT NULL,
+  `operation` ENUM('WITHDRAW', 'DEPOSIT') NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+
