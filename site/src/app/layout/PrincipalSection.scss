@@ -1,0 +1,7 @@
+.principalsection {
+  display: flex;
+  flex-direction: column;
+  &__content {
+    padding: 1rem 5rem;
+  }
+}
