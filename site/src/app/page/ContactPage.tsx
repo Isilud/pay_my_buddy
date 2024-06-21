@@ -62,15 +62,17 @@ export default function ContactPage(): JSX.Element {
         ) : (
           <table className="contactpage__friendlist__table">
             <thead>
-              <th>
-                <span>Name</span>
-              </th>
-              <th>
-                <span>Email</span>
-              </th>
-              <th>
-                <span>Action</span>
-              </th>
+              <tr>
+                <th>
+                  <span>Name</span>
+                </th>
+                <th>
+                  <span>Email</span>
+                </th>
+                <th>
+                  <span>Action</span>
+                </th>
+              </tr>
             </thead>
             <tbody>
               {friendList.map((friend) => (

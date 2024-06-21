@@ -13,6 +13,7 @@ import {
 import { UserData, userDataState } from "../store/userAtom";
 import ContactPage from "../page/ContactPage";
 import ProfilePage from "../page/ProfilePage";
+import HomePage from "../page/HomePage";
 
 export default function Main(): JSX.Element {
   const [userData, setUserData] = useRecoilState(userDataState);
@@ -36,7 +37,11 @@ export default function Main(): JSX.Element {
             <>
               <Route
                 index
-                element={<PrincipalSection>Home</PrincipalSection>}
+                element={
+                  <PrincipalSection>
+                    <HomePage />
+                  </PrincipalSection>
+                }
               />
               <Route
                 path="Transfer"

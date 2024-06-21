@@ -36,7 +36,7 @@ export default function ConnexionPage(): JSX.Element {
         />
         <input
           className="connexionpage__input"
-          type="text"
+          type="password"
           placeholder="Mot de passe"
           value={form.password}
           onChange={(e) => {

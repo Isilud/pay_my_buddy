@@ -94,15 +94,17 @@ export default function TransfertPage(): JSX.Element {
       <span>Mes transactions</span>
       <table className="transfertpage__table">
         <thead>
-          <th>
-            <span>Connexion</span>
-          </th>
-          <th>
-            <span>Description</span>
-          </th>
-          <th>
-            <span>Montant</span>
-          </th>
+          <tr>
+            <th>
+              <span>Connexion</span>
+            </th>
+            <th>
+              <span>Description</span>
+            </th>
+            <th>
+              <span>Montant</span>
+            </th>
+          </tr>
         </thead>
         <tbody>
           {transactions.map((transaction) => (

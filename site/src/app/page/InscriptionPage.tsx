@@ -72,9 +72,7 @@ export default function InscriptionPage(): JSX.Element {
         <button
           className="connexionpage__button"
           onClick={() => {
-            userRegistration(form)
-              .then((res) => console.log(res))
-              .then(() => navigate("/"));
+            userRegistration(form).then(() => navigate("/"));
           }}
         >
           Register
