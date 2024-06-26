@@ -17,6 +17,7 @@ export default function TransfertPage(): JSX.Element {
   const [friendList, setFriendList] = useState<User[]>([]);
   const [selectedFriend, setSelectedFriend] = useState<string>("");
   const [amountValue, setAmountValue] = useState<number | null>(0);
+  const [description, setDescription] = useState<string>("");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
@@ -34,11 +35,15 @@ export default function TransfertPage(): JSX.Element {
     });
   }
 
-  function createTransactionWithFriend(friendId: string, amount: number): void {
+  function createTransactionWithFriend(
+    friendId: string,
+    description: string,
+    amount: number
+  ): void {
     const transaction: TransactionForm = {
       amount,
       friendId,
-      description: "Description",
+      description,
       withBank: false,
       userId: userData!.id,
       operation: "DEPOSIT",
@@ -70,21 +75,36 @@ export default function TransfertPage(): JSX.Element {
             </option>
           ))}
         </select>
+        <div>
+          <input
+            type="number"
+            value={amountValue ?? ""}
+            onChange={(e) => {
+              const value = !Number.isNaN(e.target.valueAsNumber)
+                ? e.target.valueAsNumber
+                : null;
+              setAmountValue(value);
+            }}
+            min={0}
+            className="profilepage__accountAction__moneyinput"
+          />
+          €
+        </div>
         <input
-          type="number"
-          value={amountValue ?? ""}
+          type="text"
+          value={description ?? ""}
           onChange={(e) => {
-            const value = !Number.isNaN(e.target.valueAsNumber)
-              ? e.target.valueAsNumber
-              : null;
-            setAmountValue(value);
+            setDescription(e.target.value ?? "");
           }}
-          min={0}
-          className="profilepage__accountAction__moneyinput"
+          className="profilepage__accountAction__descriptioninput"
         />
         <button
           onClick={() => {
-            createTransactionWithFriend(selectedFriend, amountValue ?? 0);
+            createTransactionWithFriend(
+              selectedFriend,
+              description,
+              amountValue ?? 0
+            );
           }}
           disabled={!amountValue || amountValue === 0}
         >

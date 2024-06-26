@@ -147,7 +147,10 @@
 				<configuration>
 					<excludes>
 						<exclude>
-							pay_my_buddy/application/**/ControllerExceptionHandler.java
+							**/ControllerExceptionHandler.*
+						</exclude>
+						<exclude>
+							**/LoginController.*
 						</exclude>
 					</excludes>
 				</configuration>

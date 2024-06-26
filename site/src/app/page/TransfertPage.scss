@@ -18,6 +18,10 @@
     margin-bottom: 1rem;
 
     &__moneyinput {
+      max-width: 4rem;
+    }
+
+    &__descriptioninput {
       width: 8rem;
     }
   }
