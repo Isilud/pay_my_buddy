@@ -16,6 +16,8 @@ import com.paymybuddy.application.model.User;
 import com.paymybuddy.application.repository.TransactionRepository;
 import com.paymybuddy.application.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TransactionService {
 
@@ -40,6 +42,7 @@ public class TransactionService {
         return transactionRepository.findTransactionWithId(user.getId());
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public Transaction createTransaction(Transaction newTransaction)
             throws UserNotFoundException, TransactionWithUnregisteredFriendException,
             TransactionWithUnsufficientAmount {
